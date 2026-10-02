@@ -1,1 +1,142 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroFoundary Payment</title>
+
+<!-- Universal Stylesheet -->
+<link rel="stylesheet" href="styles.css">
+
+<style>
+    body {
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .header {
+        padding: 20px 0;
+    }
+
+    .header img {
+        width: 120px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .header-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-top: 10px;
+        color: #222;
+    }
+
+    .content-box {
+        margin: 30px auto;
+        width: 90%;
+        max-width: 420px;
+        padding: 20px;
+        border-radius: 12px;
+        background: #fafafa;
+        box-shadow: 0 0 8px rgba(0,0,0,0.08);
+    }
+
+    .label {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .price {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .cancel-btn {
+        background: #444;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        font-size: 18px;
+        margin-bottom: 25px;
+        width: 100%;
+    }
+
+    .cancel-btn:active {
+        opacity: 0.7;
+    }
+</style>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+
+</head>
+<body>
+
+<!-- Brand Header -->
+<div class="header">
+    <img src="IMG_1741.jpg" alt="MicroFoundary Logo">
+    <div class="header-title">MicroFoundary</div>
+</div>
+
+<!-- Main Content -->
+<div class="content-box">
+    <div id="toolName" class="label"></div>
+    <div id="toolPrice" class="price"></div>
+
+    <button class="cancel-btn" onclick="window.location.href='index.html';">
+        Cancel
+    </button>
+
+    <div id="paypal-button-container"></div>
+</div>
+
+<script>
+    // Read tool name from URL
+    const params = new URLSearchParams(window.location.search);
+    const tool = params.get("tool");
+
+    // Whole-dollar price table
+    const prices = {
+        "Clarifier": 5,
+        "PulseCounter": 4,
+        "AutoWriter": 6,
+        "MicroNote": 3,
+        "TimeStampTool": 3,
+        "StarterWidget": 2,
+        "QuickCounter": 3,
+        "MicroTimer": 3,
+        "MicroCopy": 2
+    };
+
+    // Display tool name + price
+    document.getElementById("toolName").innerText = `You are purchasing: ${tool}`;
+    const price = prices[tool] || 0;
+    document.getElementById("toolPrice").innerText = `Price: $${price}.00`;
+
+    // PayPal Buttons
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: { value: price.toString() }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert("Payment completed!");
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
+</body>
+</html>
