@@ -91,7 +91,7 @@
     const params = new URLSearchParams(window.location.search);
     const tool = params.get("tool");
 
-    // Whole-dollar price table
+    // Whole-dollar integer price table
     const prices = {
         "Clarifier": 5,
         "PulseCounter": 4,
@@ -104,10 +104,10 @@
         "MicroCopy": 2
     };
 
-    // Tool + price for processor
+    // Display tool name + integer price
     document.getElementById("toolName").innerText = `Tool: ${tool}`;
     const price = prices[tool] || 0;
-    document.getElementById("toolPrice").innerText = `Price: $${price}.00`;
+    document.getElementById("toolPrice").innerText = `Price: $${price}`;
 </script>
 
 </body>
